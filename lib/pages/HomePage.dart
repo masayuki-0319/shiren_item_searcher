@@ -45,13 +45,40 @@ class _MyHomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Shiren Item Searcher'),
       ),
-      body: ViewItem(item: dummyItems[0]),
+      body: ViewItems(),
     );
   }
 }
 
+final _backgroundColor = Colors.green[100];
 final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
+
+class ViewItems extends StatelessWidget {
+  const ViewItems();
+
+  Widget _buildViewItemWidgets(List<Widget> items) {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => items[index],
+      itemCount: items.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final items = <ViewItem>[];
+
+    for (var i = 0; i < dummyItems.length; i++) {
+      items.add(ViewItem(item: dummyItems[i]));
+    }
+
+    return Container(
+      color: _backgroundColor,
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: _buildViewItemWidgets(items),
+    );
+  }
+}
 
 class ViewItem extends StatelessWidget {
   final Map item;
@@ -80,9 +107,9 @@ class ViewItem extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Icon(
-                    Icons.cake,
-                    size: 60.0,
+                  child: Image.asset(
+                    'assets/images/ver_1_sfc/${item['item_type']}.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
                 Center(
