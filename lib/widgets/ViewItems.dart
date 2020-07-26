@@ -3,46 +3,18 @@ import 'package:flutter/material.dart';
 final _backgroundColor = Colors.green[100];
 final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
-final List<Map> dummyItems = [
-  {
-    "id": 1,
-    "name": "つるはし",
-    "item_type": "sword",
-    "ask_price": 240,
-    "sell_price": 100,
-    "description": "ダンジョンの壁を掘れる",
-    "comment": null,
-    "attack_num": 1,
-    "defence_num": null,
-    "テーブルマウンテン": "○",
-    "掛軸裏の洞窟": "○",
-    "食神のほこら": null,
-    "フェイの最終問題": "○"
-  },
-  {
-    "id": 3,
-    "name": "こん棒",
-    "item_type": "sword",
-    "ask_price": 240,
-    "sell_price": 80,
-    "description": "特になし",
-    "comment": null,
-    "attack_num": 2,
-    "defence_num": null,
-    "テーブルマウンテン": "○",
-    "掛軸裏の洞窟": "○",
-    "食神のほこら": null,
-    "フェイの最終問題": "○"
-  },
-];
 
 class ViewItems extends StatelessWidget {
-  const ViewItems();
+  final List itemList;
 
-  Widget _buildViewItemWidgets(List<Widget> items) {
+  const ViewItems({
+    @required this.itemList,
+  }) : assert(itemList != null);
+
+  Widget _buildViewItemWidgets(List<Widget> itemList) {
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => items[index],
-      itemCount: items.length,
+      itemBuilder: (BuildContext context, int index) => itemList[index],
+      itemCount: itemList.length,
     );
   }
 
@@ -50,8 +22,8 @@ class ViewItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = <ViewItem>[];
 
-    for (var i = 0; i < dummyItems.length; i++) {
-      items.add(ViewItem(item: dummyItems[i]));
+    for (var i = 0; i < itemList.length; i++) {
+      items.add(ViewItem(item: itemList[i]));
     }
 
     return Container(
@@ -80,7 +52,7 @@ class ViewItem extends StatelessWidget {
           highlightColor: Colors.greenAccent,
           splashColor: Colors.greenAccent,
           onTap: () {
-            print('I was tapped!');
+            print('Tap !');
           },
           child: Padding(
             padding: EdgeInsets.all(16.0),
