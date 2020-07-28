@@ -1,15 +1,68 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 final _backgroundColor = Colors.green[100];
 final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
+final dummyItems = [
+  {
+    "id": 1,
+    "name": "つるはし",
+    "item_type": "sword",
+    "ask_price": 240,
+    "sell_price": 100,
+    "description": "ダンジョンの壁を掘れる",
+    "comment": null,
+    "attack_num": 1,
+    "defence_num": null,
+    "テーブルマウンテン": "○",
+    "掛軸裏の洞窟": "○",
+    "食神のほこら": null,
+    "フェイの最終問題": "○"
+  },
+  {
+    "id": 3,
+    "name": "こん棒",
+    "item_type": "sword",
+    "ask_price": 240,
+    "sell_price": 80,
+    "description": "特になし",
+    "comment": null,
+    "attack_num": 2,
+    "defence_num": null,
+    "テーブルマウンテン": "○",
+    "掛軸裏の洞窟": "○",
+    "食神のほこら": null,
+    "フェイの最終問題": "○"
+  },
+];
 
 class ViewItems extends StatelessWidget {
-  final List itemList;
+  static List itemList;
+  const ViewItems();
 
-  const ViewItems({
-    @required this.itemList,
-  }) : assert(itemList != null);
+  Future<List> loadJsonItemList() async {
+    String loadData = await rootBundle.loadString('assets/data/item_list.json');
+    return json.decode(loadData);
+  }
+
+  void fetchItemList() {
+    // TODO: 起動時はエラー、再読み込みで表示可能
+    loadJsonItemList().then((jsonItems) {
+      itemList = (jsonItems != null) ? jsonItems : dummyItems;
+    }).catchError((e) {
+      print('=================Json load error : $e');
+    });
+  }
+
+  void initState() {
+    fetchItemList();
+    print('=========================-');
+    print(itemList);
+    print('=========================-');
+  }
 
   Widget _buildViewItemWidgets(List<Widget> itemList) {
     return ListView.builder(
@@ -22,6 +75,8 @@ class ViewItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = <ViewItem>[];
 
+    // ここで、itemList を更新する必要がある
+    initState();
     for (var i = 0; i < itemList.length; i++) {
       items.add(ViewItem(item: itemList[i]));
     }
@@ -70,7 +125,7 @@ class ViewItem extends StatelessWidget {
                   child: Text(
                     item['name'],
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
                 Align(
