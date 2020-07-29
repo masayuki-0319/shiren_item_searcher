@@ -39,26 +39,22 @@ final dummyItems = [
   },
 ];
 
+Future<String> loadJsonItemList() async {
+  return rootBundle.loadString('assets/data/item_list.json');
+}
+
+Future<List> fetchItemList() async {
+  String jsonData = await loadJsonItemList();
+  List loadData = jsonDecode(jsonData);
+  return (loadData != null) ? loadData : dummyItems;
+}
+
 class ViewItems extends StatelessWidget {
   static List itemList;
   const ViewItems();
 
-  Future<List> loadJsonItemList() async {
-    String loadData = await rootBundle.loadString('assets/data/item_list.json');
-    return json.decode(loadData);
-  }
-
-  void fetchItemList() {
-    // TODO: 起動時はエラー、再読み込みで表示可能
-    loadJsonItemList().then((jsonItems) {
-      itemList = (jsonItems != null) ? jsonItems : dummyItems;
-    }).catchError((e) {
-      print('=================Json load error : $e');
-    });
-  }
-
-  void initState() {
-    fetchItemList();
+  void initState() async {
+    itemList = await fetchItemList();
     print('=========================-');
     print(itemList);
     print('=========================-');
@@ -73,10 +69,10 @@ class ViewItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = <ViewItem>[];
-
     // ここで、itemList を更新する必要がある
     initState();
+
+    final items = <ViewItem>[];
     for (var i = 0; i < itemList.length; i++) {
       items.add(ViewItem(item: itemList[i]));
     }
