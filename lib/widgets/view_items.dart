@@ -7,21 +7,15 @@ final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
 
 class ViewItems extends StatelessWidget {
-  static List itemList;
   const ViewItems();
 
-  void initState() async {
-    itemList = await fetchItemList();
-    print('=========================-');
-    print(itemList);
-    print('=========================-');
-  }
+  static List<ViewItem> items = [];
 
-  Widget _buildViewItemWidgets(List<Widget> itemList) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => itemList[index],
-      itemCount: itemList.length,
-    );
+  void initState() async {
+    List itemList = await fetchItemList();
+    for (var i = 0; i < itemList.length; i++) {
+      items.add(ViewItem(item: itemList[i]));
+    }
   }
 
   @override
@@ -29,15 +23,17 @@ class ViewItems extends StatelessWidget {
     // ここで、itemList を更新する必要がある
     initState();
 
-    final items = <ViewItem>[];
-    for (var i = 0; i < itemList.length; i++) {
-      items.add(ViewItem(item: itemList[i]));
-    }
-
     return Container(
       color: _backgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: _buildViewItemWidgets(items),
+    );
+  }
+
+  Widget _buildViewItemWidgets(List<Widget> itemList) {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => itemList[index],
+      itemCount: itemList.length,
     );
   }
 }
