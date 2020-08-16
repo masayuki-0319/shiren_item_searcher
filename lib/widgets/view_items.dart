@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
 
-import '../services/fetch_item.dart';
+import '../models/item.dart';
+import '../services/fetch_item_list.dart';
 
 final _backgroundColor = Colors.green[100];
 final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
 
 class ViewItems extends StatelessWidget {
-  static List itemList;
   const ViewItems();
 
+  static List<ViewItem> viewItems = [];
+
   void initState() async {
-    itemList = await fetchItemList();
-    print('=========================-');
-    print(itemList);
-    print('=========================-');
+    List itemList = await fetchItemList();
+
+    itemList.forEach((jsonItem) {
+      Item _item = Item.fromJson(jsonItem);
+      ViewItem _viewItem = ViewItem(item: _item);
+      viewItems.add(_viewItem);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ここで、itemList を取得する必要がある
+    // TODO: 起動後、reloadしないとデータが読み込まれない
+    initState();
+
+    return Container(
+      color: _backgroundColor,
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: _buildViewItemWidgets(viewItems),
+    );
   }
 
   Widget _buildViewItemWidgets(List<Widget> itemList) {
@@ -23,27 +41,10 @@ class ViewItems extends StatelessWidget {
       itemCount: itemList.length,
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    // ここで、itemList を更新する必要がある
-    initState();
-
-    final items = <ViewItem>[];
-    for (var i = 0; i < itemList.length; i++) {
-      items.add(ViewItem(item: itemList[i]));
-    }
-
-    return Container(
-      color: _backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: _buildViewItemWidgets(items),
-    );
-  }
 }
 
 class ViewItem extends StatelessWidget {
-  final Map item;
+  final Item item;
 
   const ViewItem({
     @required this.item,
@@ -70,13 +71,13 @@ class ViewItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Image.asset(
-                    'assets/images/ver_1_sfc/${item['item_type']}.png',
+                    'assets/images/ver_1_sfc/${item.itemType}.png',
                     fit: BoxFit.contain,
                   ),
                 ),
                 Center(
                   child: Text(
-                    item['name'],
+                    item.name,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline5,
                   ),
@@ -85,11 +86,11 @@ class ViewItem extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: Row(children: [
                     Text(
-                      '買値: ${item['ask_price'].toString()}',
+                      '買値: ${item.askPrice.toString()}',
                       style: TextStyle(color: Colors.blueAccent),
                     ),
                     Text(
-                      '売値: ${item['sell_price'].toString()}',
+                      '売値: ${item.sellPrice.toString()}',
                       style: TextStyle(color: Colors.redAccent),
                     ),
                   ]),
