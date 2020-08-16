@@ -12,9 +12,9 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shiren Item Searcher'),
+        title: const Text('Shiren Item Searcher'),
       ),
-      body: ViewItems(),
+      body: const ViewItems(),
     );
   }
 }

@@ -4,6 +4,7 @@ import '../models/item.dart';
 import '../services/fetch_item_list.dart';
 
 final _backgroundColor = Colors.green[100];
+// ignore: prefer_const_declarations
 final _rowHeight = 100.0;
 final _borderRadius = BorderRadius.circular(_rowHeight / 2);
 
@@ -12,12 +13,18 @@ class ViewItems extends StatelessWidget {
 
   static List<ViewItem> viewItems = [];
 
-  void initState() async {
-    List itemList = await fetchItemList();
+  Future<void> initState() async {
+    final itemList = await fetchItemList();
 
-    itemList.forEach((jsonItem) {
-      Item _item = Item.fromJson(jsonItem);
-      ViewItem _viewItem = ViewItem(item: _item);
+    if (itemList != null) {
+      _addViewItem(itemList);
+    }
+  }
+
+  void _addViewItem(dynamic itemList) {
+    itemList.forEach((dynamic jsonItem) {
+      final _item = Item.fromJson(jsonItem as Map<String, dynamic>);
+      final _viewItem = ViewItem(item: _item);
       viewItems.add(_viewItem);
     });
   }
@@ -30,7 +37,7 @@ class ViewItems extends StatelessWidget {
 
     return Container(
       color: _backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: _buildViewItemWidgets(viewItems),
     );
   }
@@ -44,11 +51,11 @@ class ViewItems extends StatelessWidget {
 }
 
 class ViewItem extends StatelessWidget {
-  final Item item;
-
   const ViewItem({
     @required this.item,
   }) : assert(item != null);
+
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +71,12 @@ class ViewItem extends StatelessWidget {
             print('Tap !');
           },
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Image.asset(
                     'assets/images/ver_1_sfc/${item.itemType}.png',
                     fit: BoxFit.contain,
@@ -87,11 +94,11 @@ class ViewItem extends StatelessWidget {
                   child: Row(children: [
                     Text(
                       '買値: ${item.askPrice.toString()}',
-                      style: TextStyle(color: Colors.blueAccent),
+                      style: const TextStyle(color: Colors.blueAccent),
                     ),
                     Text(
                       '売値: ${item.sellPrice.toString()}',
-                      style: TextStyle(color: Colors.redAccent),
+                      style: const TextStyle(color: Colors.redAccent),
                     ),
                   ]),
                 ),

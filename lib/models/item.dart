@@ -1,18 +1,4 @@
 class Item {
-  int id;
-  String name;
-  String itemType;
-  int askPrice;
-  int sellPrice;
-  String description;
-  String comment;
-  dynamic attackNumber;
-  dynamic defenceNumber;
-  bool isDungeonTableMountain;
-  bool isDungeonKakejiku;
-  bool isDungeonSyokujin;
-  bool isDungeonFei;
-
   Item({
     this.id,
     this.name,
@@ -31,19 +17,33 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
-      id: json['id'],
-      name: json['name'],
-      itemType: json['item_type'],
-      askPrice: json['ask_price'],
-      sellPrice: json['sell_price'],
-      description: json['description'],
+      id: json['id'] as int,
+      name: json['name'] as String,
+      itemType: json['item_type'] as String,
+      askPrice: json['ask_price'] as int,
+      sellPrice: json['sell_price'] as int,
+      description: json['description'] as String,
       comment: json['comment'],
       attackNumber: json['attack_number'],
       defenceNumber: json['defence_number'],
-      isDungeonTableMountain: json['テーブルマウンテン'] != null ? true : false,
-      isDungeonKakejiku: json['掛軸裏の洞窟'] != null ? true : false,
-      isDungeonSyokujin: json['食神のほこら'] != null ? true : false,
-      isDungeonFei: json['フェイの最終問題'] != null ? true : false,
+      isDungeonTableMountain: json['テーブルマウンテン'] != null,
+      isDungeonKakejiku: json['掛軸裏の洞窟'] != null,
+      isDungeonSyokujin: json['食神のほこら'] != null,
+      isDungeonFei: json['フェイの最終問題'] != null,
     );
   }
+
+  int id;
+  String name;
+  String itemType;
+  int askPrice;
+  int sellPrice;
+  String description;
+  dynamic comment;
+  dynamic attackNumber;
+  dynamic defenceNumber;
+  bool isDungeonTableMountain;
+  bool isDungeonKakejiku;
+  bool isDungeonSyokujin;
+  bool isDungeonFei;
 }
